@@ -5,6 +5,9 @@
 ;;
 ;; https://bitbucket.org/proyecto-ucaccar/emacs-easy-config
 
+;; Start server (connect to it using emacsclient)
+(server-start)
+
 ;;
 ;; Personalize basic emacs behaviour. See https://github.com/rrgalvan/emacs
 ;; -------------------------------------------------------------------
@@ -161,6 +164,20 @@
 (global-set-key [(shift meta q)] 'rebox-dwim)
 (global-set-key [(meta /)] 'rebox-cycle)
 
+;; Make rebox2 work for fortran90 comments (see https://github.com/lewang/rebox2/issues/11)
+(defvar rebox-language-character-alist
+  '((3 . "/") (4 . "#") (5 . ";") (6 . "%") (7 . "!"))
+  "Alist relating language to comment character, for generic languages.")
+(defvar rebox-regexp-start
+  ["^[ \t]*\\(/\\*\\|//+\\|#+\\|;+\\|%+\\)"
+   "^"                                  ; 1
+   "^[ \t]*/\\*"                        ; 2
+   "^[ \t]*//+"                         ; 3
+   "^[ \t]*#+"                          ; 4
+   "^[ \t]*\;+"                         ; 5
+   "^[ \t]*%+"                          ; 6
+   "^[ \t]*!+"                          ; 7
+   ])
 
 ;; Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10?
 ;; -------------------------------------------------------------------
