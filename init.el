@@ -8,6 +8,9 @@
 ;; Start server (connect to it using emacsclient)
 (server-start)
 
+;; Set width of emacs windows (frame)
+(set-frame-width (selected-frame) 85)
+
 ;;
 ;; Personalize basic emacs behaviour. See https://github.com/rrgalvan/emacs
 ;; -------------------------------------------------------------------
@@ -162,19 +165,7 @@
       (sp-local-pair "*" "*" :bind "C-*")
       (sp-local-tag "2" "**" "**")
       (sp-local-tag "s" "```scheme" "```")
-      (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
-
-;;; tex-mode latex-mode
-    (sp-with-modes '(tex-mode plain-tex-mode latex-mode)
-      (sp-local-tag "i" "1d5f8e69396c521f645375107197ea4dfbc7b792quot;<" "1d5f8e69396c521f645375107197ea4dfbc7b792quot;>"))
-
-;;; html-mode
-    (sp-with-modes '(html-mode sgml-mode web-mode)
-      (sp-local-pair "<" ">"))
-
-;;; lisp modes
-    (sp-with-modes sp--lisp-modes
-      (sp-local-pair "(" nil :bind "C-("))))
+      (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))))
 
 ;; Enhanced undo-redo
 ;; -------------------------------------------------------------------
