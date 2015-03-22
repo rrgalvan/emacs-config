@@ -15,9 +15,6 @@
 ;; Directoy for local emacs lisp files:  ~/.emacs.d/site-lisp/
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/setup"))
 
-;; Highlight marked text - only works under X.
-(transient-mark-mode t)
-
 ;; Remove text in active region if inserting text
 (delete-selection-mode 1)
 
@@ -36,6 +33,18 @@
 
 ;; Turn on highlighting for search strings.
 (setq search-highlight t)
+
+;; turn on paren match highlighting
+(show-paren-mode 1)
+
+;;highlight entire body of bracket expression
+;;(setq show-paren-style 'expression)
+
+;; Save point position between sessions
+(require 'saveplace)
+
+;; display line numbers in margin. New in Emacs 23
+(global-linum-mode 1)
 
 ;; Remove trailing whitespace automatically
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -72,6 +81,28 @@
 ;; M-x compile is tedious
 (global-set-key (kbd "C-c c") 'compile)
 
+(when window-system
+  ;; Highlight marked text - only works under X.
+  (transient-mark-mode t)
+
+  ;; ;; Use C-z as zundo key
+  ;; (global-set-key (kbd "C-z") 'undo)
+)
+
+;; set a default font
+;; -------------------------------------------------------------------
+(when (member "DejaVu Sans Mono" (font-family-list))
+  (set-face-attribute 'default nil :font "DejaVu Sans Mono"))
+
+
+;; 'Standard' cut, copy, paste, undo
+;; -------------------------------------------------------------------
+(cua-mode 1)
+
+;; Auto-insert/close bracket pairs
+;; -------------------------------------------------------------------
+(electric-pair-mode 1)
+
 ;; Recent files
 ;; -------------------------------------------------------------------
 (require 'recentf)
@@ -86,8 +117,8 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-
 (package-initialize)
+(setq package-enable-at-startup nil)
 
 ;; In current emacs configuration we will employ 'use-package' for
 ;; install and config packages. See https://github.com/jwiegley/use-package
@@ -97,6 +128,42 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(require 'use-package)
+
+;; Install manually 'dash package
+(setq my-packages '(dash))
+(when (not package-archive-contents) (package-refresh-contents))
+(dolist (p my-packages) (when (not (package-installed-p p))
+			  (package-install p)))
+
+;; Automatically recompile Emacs Lisp source files
+(use-package auto-compile
+  :ensure t)
+  ;; :init (auto-compile-on-load-mode))
+(setq load-prefer-newer t)
+
+
+;; Enhanced undo-redo
+;; -------------------------------------------------------------------
+(use-package undo-tree
+  :ensure t
+  :diminish undo-tree-mode
+  :init (global-undo-tree-mode))
+(defalias 'redo 'undo-tree-redo)
+(global-set-key [(control x)(control z)] 'redo)
+
+(use-package imenu-anywhere
+  :ensure t
+  :bind (("C-c i" . imenu-anywhere)))
+
+;; ---------------------------------------------------------------- ;;
+;; Rebox (fancy comment boxes, see rebox2.el for help)              ;;
+;; ---------------------------------------------------------------- ;;
+(use-package rebox2)
+(global-set-key [(shift meta q)] 'rebox-dwim)
+(global-set-key [(meta /)] 'rebox-cycle)
+
 
 ;; Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10?
+;; -------------------------------------------------------------------
 (require 'iso-transl)
