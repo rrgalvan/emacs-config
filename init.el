@@ -57,9 +57,6 @@
 ;; http://www.masteringemacs.org/articles/2011/01/19/script-files-executable-automatically/
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
-;; "All strings representing colors will be highlighted with the color they represent."
-(rainbow-mode t)
-
 ;; Include the size of the file in the mode line
 (size-indication-mode nil)
 
