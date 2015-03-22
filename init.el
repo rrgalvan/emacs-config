@@ -99,16 +99,15 @@
 ;; -------------------------------------------------------------------
 (cua-mode 1)
 
-;; Auto-insert/close bracket pairs
-;; -------------------------------------------------------------------
-(electric-pair-mode 1)
-
 ;; Recent files
 ;; -------------------------------------------------------------------
 (require 'recentf)
 (setq recentf-max-saved-items 200
       recentf-max-menu-items 15)
 (recentf-mode)
+
+;; I don't want to type in "yes" or "no" - I want y/n.
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;;
 ;; Package management
@@ -142,6 +141,40 @@
   ;; :init (auto-compile-on-load-mode))
 (setq load-prefer-newer t)
 
+;; smartparens for good handling of parentheses
+;; -------------------------------------------------------------------
+(use-package smartparens
+  :ensure t
+  :diminish smartparens-mode
+  :config
+  (progn
+    (require 'smartparens-config)
+    (smartparens-global-mode 1)
+
+;;;;;;;;;;;;;;;;;;
+    ;; pair management
+
+    (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
+    (sp-local-pair 'web-mode "<" nil :when '(my/sp-web-mode-is-code-context))
+
+;;; markdown-mode
+    (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+      (sp-local-pair "*" "*" :bind "C-*")
+      (sp-local-tag "2" "**" "**")
+      (sp-local-tag "s" "```scheme" "```")
+      (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
+
+;;; tex-mode latex-mode
+    (sp-with-modes '(tex-mode plain-tex-mode latex-mode)
+      (sp-local-tag "i" "1d5f8e69396c521f645375107197ea4dfbc7b792quot;<" "1d5f8e69396c521f645375107197ea4dfbc7b792quot;>"))
+
+;;; html-mode
+    (sp-with-modes '(html-mode sgml-mode web-mode)
+      (sp-local-pair "<" ">"))
+
+;;; lisp modes
+    (sp-with-modes sp--lisp-modes
+      (sp-local-pair "(" nil :bind "C-("))))
 
 ;; Enhanced undo-redo
 ;; -------------------------------------------------------------------
