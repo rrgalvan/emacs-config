@@ -24,9 +24,9 @@
 ;; Scroll by one line at a time.
 (setq scroll-step 1)
 
-;; Scroll
-(global-set-key [S-down] 'scroll-up-line)
-(global-set-key [S-up]  'scroll-down-line)
+;; ;; Scroll
+;; (global-set-key [S-down] 'scroll-up-line)
+;; (global-set-key [S-up]  'scroll-down-line)
 
 ;; Make searches case insensitive.
 (setq case-fold-search nil)
@@ -45,6 +45,8 @@
 
 ;; display line numbers in margin. New in Emacs 23
 (global-linum-mode 1)
+;; line numbers format (add a vertical line on the right)
+(setq linum-format "%3d\u2502")
 
 ;; Remove trailing whitespace automatically
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -85,15 +87,10 @@
   ;; Highlight marked text - only works under X.
   (transient-mark-mode t)
 
-  ;; ;; Use C-z as zundo key
-  ;; (global-set-key (kbd "C-z") 'undo)
+  ;; Select font
+  (set-fontset-font "fontset-default" 'unicode "Dejavu Sans Mono")
+  (set-face-font 'default "Inconsolata-15")
 )
-
-;; set a default font
-;; -------------------------------------------------------------------
-(when (member "DejaVu Sans Mono" (font-family-list))
-  (set-face-attribute 'default nil :font "DejaVu Sans Mono"))
-
 
 ;; 'Standard' cut, copy, paste, undo
 ;; -------------------------------------------------------------------
@@ -159,7 +156,8 @@
 ;; ---------------------------------------------------------------- ;;
 ;; Rebox (fancy comment boxes, see rebox2.el for help)              ;;
 ;; ---------------------------------------------------------------- ;;
-(use-package rebox2)
+(use-package rebox2
+  :ensure t )
 (global-set-key [(shift meta q)] 'rebox-dwim)
 (global-set-key [(meta /)] 'rebox-cycle)
 
