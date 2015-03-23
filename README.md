@@ -1,5 +1,5 @@
-Emacs Easy Config
-=================
+Configuración "sencilla" de Emacs
+===========================
 
 Ficheros de configuración de Emacs orientados a que 
 
