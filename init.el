@@ -206,3 +206,9 @@
 ;; Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10?
 ;; -------------------------------------------------------------------
 (require 'iso-transl)
+
+(require 'color-theme)
+;; set default color theme
+;;(color-theme-select)
+(color-theme-gtk-ide)
+;;(color-theme-emacs-nw)
