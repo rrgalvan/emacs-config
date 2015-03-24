@@ -48,6 +48,7 @@
 
 ;; Save point position between sessions
 (require 'saveplace)
+(setq-default save-place t)
 
 ;; display line numbers in margin. New in Emacs 23
 (global-linum-mode 1)
@@ -94,8 +95,11 @@
   (transient-mark-mode t)
 
   ;; Select font
-  (set-fontset-font "fontset-default" 'unicode "Dejavu Sans Mono")
-  (set-face-font 'default "Inconsolata-15")
+   (if (find-font (font-spec :name "Dejavu Sans Mono"))
+       (progn
+  	 (set-fontset-font "fontset-default" 'unicode "Dejavu Sans Mono")
+  	 (set-face-font 'default "Inconsolata-15")
+  	 ))
 )
 
 ;; 'Standard' cut, copy, paste, undo
@@ -209,6 +213,5 @@
 
 (require 'color-theme)
 ;; set default color theme
-;;(color-theme-select)
+(color-theme-initialize)
 (color-theme-gtk-ide)
-;;(color-theme-emacs-nw)
