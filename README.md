@@ -8,17 +8,12 @@ Ficheros de configuración de Emacs orientados a que
 
 Instalación
 ---------------
-
 1. Asegurarse de que en la carpeta $HOME no existe el archivo regular *.emacs* ni el directorio *.emacs.d* (donde se almacena la configuración de emacs). Por ejemplo, se pueden borrar directamente (por supuesto, si se desea guardar la configuración previa, se debe hacer una copia antes de borrar):
-
    > $ rm -rf .emacs .emacs.d
-
 2. En la carpeta $HOME, clonar el repositorio
 
    > $ git clone <dirección ssh o https de este repositorio>
-
 3. (Opcional) Para mejorar el tipo de letras, instalar el paquete emacs *fonts-inconsolata*:
-
    > $ sudo apt-get install fonts-inconsolata
 
 La próxima vez que se arranque Emacs, se descargarán automáticamente de internet algunos paquetes y se mostrarán varios mensajes de aviso (el resto de las veces, estos mensajes no aparecerán).
