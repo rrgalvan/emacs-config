@@ -149,6 +149,7 @@
 ;;| Automatically recompile Emacs Lisp source files
 ;;`------------------------------------------------
 (use-package auto-compile
+  :defer t
   :ensure t)
   ;; :init (auto-compile-on-load-mode))
 (setq load-prefer-newer t)
@@ -208,6 +209,7 @@
 ;;| Rebox (fancy comment boxes, see rebox2.el for help)
 ;;`----------------------------------------------------
 (use-package rebox2
+  :defer 2 ;; Wait for 2 seconds idle
   :ensure t )
 (global-set-key [(shift meta /)] 'rebox-dwim)
 (global-set-key [(meta /)] 'rebox-cycle)
@@ -241,18 +243,53 @@
 ;;`----------------------------------------------------------
 (use-package python-mode
   :ensure t
+  :defer 1 ;; Wait for 1 seconds of idle time
   :config (progn
 	    (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 	    (add-to-list 'interpreter-mode-alist '("python" . python-mode))
-	    (require 'ipython) )
+	    (require 'ipython)
+	    )
   )
 
 ;; Jedi (python auto-completion)
 (use-package jedi
   :ensure t
+  :defer 1 ;; Wait for 1 seconds of idle time
+  :config (progn
+	    (add-hook 'python-mode-hook 'jedi:setup)
+	    (setq jedi:complete-on-dot t))
   )
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+
+;; ;;,-------------------------------------------------
+;; ;;| Helm (auto-incremental completion and selection)
+;; ;;`-------------------------------------------------
+;; (use-package helm
+;;   :ensure helm
+;;   :diminish helm-mode
+;;   :defer t
+;;   :init
+;;   (progn
+;;     (require 'helm-config)
+;;     (setq helm-candidate-number-limit 100)
+;;     ;; From https://gist.github.com/antifuchs/9238468
+;;     (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
+;;           helm-input-idle-delay 0.01  ; this actually updates things                                        ; reeeelatively quickly.
+;;           helm-quick-update t
+;;           helm-M-x-requires-pattern nil
+;;           helm-ff-skip-boring-files t
+;; 	  recentf-max-menu-items 25
+;; 	  helm-recentf-fuzzy-match t ;; search for recent files
+;; 	  )
+;;     (helm-mode))
+;;   :bind (("C-x C-b" . helm-mini)
+;; 	 ("C-x b" . helm-mini)
+;; 	 ("C-h a" . helm-apropos)
+;;          ("M-y" . helm-show-kill-ring)
+;;          ("M-x" . helm-M-x)
+;;          ("C-x c o" . helm-occur)
+;;          ("C-x c s" . helm-swoop)
+;; 	 ("C-x c SPC" . helm-all-mark-rings))
+;; )
 
 ;;,--------------------------------------------------------------------
 ;;| Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10?

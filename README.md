@@ -1,5 +1,5 @@
 Configuración "sencilla" de Emacs
-===========================
+=================================
 
 Ficheros de configuración de Emacs orientados a que
 
@@ -14,7 +14,7 @@ Instalación
 
 2. En la carpeta $HOME, clonar el repositorio
 
-        $ git clone <dirección ssh o https de este repositorio
+        $ git clone <dirección ssh o https de este repositorio>
 
 3. (Opcional) Para mejorar el tipo de letras, instalar el paquete emacs *fonts-inconsolata*:
 
