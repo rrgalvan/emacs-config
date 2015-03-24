@@ -8,12 +8,12 @@
 ;; Start server (connect to it using emacsclient)
 (server-start)
 
+;;,-------------------------------------------------------------------------
+;;| Personalize basic emacs behaviour. See https://github.com/rrgalvan/emacs
+;;`-------------------------------------------------------------------------
+
 ;; Set width of emacs windows (frame)
 (set-frame-width (selected-frame) 85)
-
-;;
-;; Personalize basic emacs behaviour. See https://github.com/rrgalvan/emacs
-;; -------------------------------------------------------------------
 
 ;; No startup screen
 (setq inhibit-startup-message t)
@@ -102,12 +102,14 @@
   	 ))
 )
 
-;; 'Standard' cut, copy, paste, undo
-;; -------------------------------------------------------------------
+;;,----------------------------------
+;;| 'Standard' cut, copy, paste, undo
+;;`----------------------------------
 (cua-mode 1)
 
-;; Recent files
-;; -------------------------------------------------------------------
+;;,-------------
+;;| Recent files
+;;`-------------
 (require 'recentf)
 (setq recentf-max-saved-items 200
       recentf-max-menu-items 15)
@@ -116,10 +118,9 @@
 ;; I don't want to type in "yes" or "no" - I want y/n.
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;;
-;; Package management
-;; -------------------------------------------------------------------
-;;
+;;,-------------------
+;;| Package management
+;;`-------------------
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
@@ -136,20 +137,38 @@
 
 (require 'use-package)
 
-;; Install manually 'dash package
+;;,----------------------------------------------
+;;| Install manually 'dash package (to avoid bug)
+;;`----------------------------------------------
 (setq my-packages '(dash))
 (when (not package-archive-contents) (package-refresh-contents))
 (dolist (p my-packages) (when (not (package-installed-p p))
 			  (package-install p)))
 
-;; Automatically recompile Emacs Lisp source files
+;;,------------------------------------------------
+;;| Automatically recompile Emacs Lisp source files
+;;`------------------------------------------------
 (use-package auto-compile
   :ensure t)
   ;; :init (auto-compile-on-load-mode))
 (setq load-prefer-newer t)
 
-;; smartparens for good handling of parentheses
-;; -------------------------------------------------------------------
+;;,-------------
+;;| Autocomplete
+;;`-------------
+(require 'auto-complete)
+(require 'auto-complete-config)
+(global-auto-complete-mode t)
+
+;; Autocomplete in all buffers (except minibuffer)
+(defun auto-complete-mode-maybe ()
+  "No maybe for you. Only AC!"
+  (unless (minibufferp (current-buffer))
+    (auto-complete-mode 1)))
+
+;;,---------------------------------------------
+;;| smartparens for good handling of parentheses
+;;`---------------------------------------------
 (use-package smartparens
   :ensure t
   :diminish smartparens-mode
@@ -164,15 +183,16 @@
     (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
     (sp-local-pair 'web-mode "<" nil :when '(my/sp-web-mode-is-code-context))
 
-;;; markdown-mode
+;;; markdown-mode, rst-mode, etc
     (sp-with-modes '(markdown-mode gfm-mode rst-mode)
       (sp-local-pair "*" "*" :bind "C-*")
       (sp-local-tag "2" "**" "**")
       (sp-local-tag "s" "```scheme" "```")
       (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))))
 
-;; Enhanced undo-redo
-;; -------------------------------------------------------------------
+;;,--------------------------------------------------------------------
+;;| Enhanced undo-redo
+;;`--------------------------------------------------------------------
 (use-package undo-tree
   :ensure t
   :diminish undo-tree-mode
@@ -180,16 +200,16 @@
 (defalias 'redo 'undo-tree-redo)
 (global-set-key [(control x)(control z)] 'redo)
 
-(use-package imenu-anywhere
-  :ensure t
-  :bind (("C-c i" . imenu-anywhere)))
+;; (use-package imenu-anywhere
+;;   :ensure t
+;;   :bind (("C-c i" . imenu-anywhere)))
 
-;; ---------------------------------------------------------------- ;;
-;; Rebox (fancy comment boxes, see rebox2.el for help)              ;;
-;; ---------------------------------------------------------------- ;;
+;;,----------------------------------------------------
+;;| Rebox (fancy comment boxes, see rebox2.el for help)
+;;`----------------------------------------------------
 (use-package rebox2
   :ensure t )
-(global-set-key [(shift meta q)] 'rebox-dwim)
+(global-set-key [(shift meta /)] 'rebox-dwim)
 (global-set-key [(meta /)] 'rebox-cycle)
 
 ;; Make rebox2 work for fortran90 comments (see https://github.com/lewang/rebox2/issues/11)
@@ -207,11 +227,34 @@
    "^[ \t]*!+"                          ; 7
    ])
 
-;; Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10?
-;; -------------------------------------------------------------------
-(require 'iso-transl)
-
+;;,------------------------
+;;| set default color theme
+;;`------------------------
 (require 'color-theme)
-;; set default color theme
 (color-theme-initialize)
 (color-theme-gtk-ide)
+
+;;,----------------------------------------------------------
+;;| Python
+;;|   Main python modes: (a) python (b) python-mode,
+;;|   see http://emacswiki.org/emacs/PythonProgrammingInEmacs
+;;`----------------------------------------------------------
+(use-package python-mode
+  :ensure t
+  :config (progn
+	    (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+	    (add-to-list 'interpreter-mode-alist '("python" . python-mode))
+	    (require 'ipython) )
+  )
+
+;; Jedi (python auto-completion)
+(use-package jedi
+  :ensure t
+  )
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+;;,--------------------------------------------------------------------
+;;| Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10?
+;;`--------------------------------------------------------------------
+(require 'iso-transl)
