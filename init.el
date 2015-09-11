@@ -247,7 +247,15 @@
   :config (progn
 	    (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 	    (add-to-list 'interpreter-mode-alist '("python" . python-mode))
-	    (require 'ipython)
+	    ;; (require 'ipython)
+	    ;; Other stuff
+	    (setq-default py-shell-name "ipython")
+	    (setq-default py-which-bufname "IPython")
+					; switch to the interpreter after executing code
+	    (setq py-shell-switch-buffers-on-execute-p t)
+	    (setq py-switch-buffers-on-execute-p t)
+					; don't split windows
+	    (setq py-split-windows-on-execute-p nil)
 	    )
   )
 
@@ -256,6 +264,7 @@
   :ensure t
   :defer 1 ;; Wait for 1 seconds of idle time
   :config (progn
+	    (jedi:install-server)
 	    (add-hook 'python-mode-hook 'jedi:setup)
 	    (setq jedi:complete-on-dot t))
   )
