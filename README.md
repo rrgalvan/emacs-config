@@ -25,4 +25,4 @@ La próxima vez que se arranque Emacs, se descargarán automáticamente de inter
 
         $ sudo pip install virtualenv
 
-Existen muchos recursos en internet para una introducción rápida a internet, por ejemplo [éste, muy completo](http://es.tldp.org/Tutoriales/doc-tutorial-emacs/intro_emacs.pdf) y [éste, muy breve](http://exal.0x2.org/emacs/emacs.html)
+Existen muchos recursos en internet para una introducción rápida a Emacs, por ejemplo [éste, muy completo](http://es.tldp.org/Tutoriales/doc-tutorial-emacs/intro_emacs.pdf) y [éste, muy breve](http://exal.0x2.org/emacs/emacs.html)
