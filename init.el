@@ -6,20 +6,34 @@
 ;; https://bitbucket.org/proyecto-ucaccar/emacs-easy-config
 
 ;; Start server (connect to it using emacsclient)
-(server-start)
+(load "server")
+(unless (server-running-p) (server-start))
 
 ;;,-------------------------------------------------------------------------
 ;;| Personalize basic emacs behaviour. See https://github.com/rrgalvan/emacs
 ;;`-------------------------------------------------------------------------
 
-;; Set width of emacs windows (frame)
-(set-frame-width (selected-frame) 85)
+(when (display-graphic-p)
+  ;; Set width of emacs windows (frame)
+  (set-frame-width (selected-frame) 85)
+
+  ;; display line numbers in margin. New in Emacs 23
+  (global-linum-mode 1)
+  ;; line numbers format (add a vertical line on the right)
+  (setq linum-format "%3d\u2502")
+
+  )
+
 
 ;; No startup screen
 (setq inhibit-startup-message t)
 
-;; Directoy for local emacs lisp files:  ~/.emacs.d/site-lisp/
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/setup"))
+;;,-----------------------------------------------------------
+;;| Directory for local lisp files (including subdirectoires)
+;;`-----------------------------------------------------------
+(setq site-lisp-dir (expand-file-name "site-lisp" user-emacs-directory))
+(let ((default-directory site-lisp-dir)) (normal-top-level-add-subdirs-to-load-path))
+(add-to-list 'load-path site-lisp-dir)
 
 ;; Remove text in active region if inserting text
 (delete-selection-mode 1)
@@ -50,10 +64,6 @@
 (require 'saveplace)
 (setq-default save-place t)
 
-;; display line numbers in margin. New in Emacs 23
-(global-linum-mode 1)
-;; line numbers format (add a vertical line on the right)
-(setq linum-format "%3d\u2502")
 
 ;; Remove trailing whitespace automatically
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -307,6 +317,16 @@
 ;;`--------------------------------------------------------------------
 (require 'iso-transl)
 
+
+;;,-----------------------------------------------------
+;;| Directory for store setup files (for specific modes)
+;;`-----------------------------------------------------
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/setup"))
+
+;;,------------------------
+;;| FreeFem++ setup
+;;`------------------------
+(require 'setup-freefem)
 
 ;;,---------------------------------------------------------------
 ;;| LaTeX (using the package Auctex: $sudo apt-get install auctex)

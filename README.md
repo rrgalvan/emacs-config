@@ -19,7 +19,10 @@ Instalación
 3. (Opcional) Para mejorar el tipo de letras, instalar el paquete emacs *fonts-inconsolata*:
 
 		$ sudo apt-get install fonts-inconsolata
-
 La próxima vez que se arranque Emacs, se descargarán automáticamente de internet algunos paquetes y se mostrarán varios mensajes de aviso (el resto de las veces, estos mensajes no aparecerán).
 
-Existen muchos recursos en internet para una introducción rápida a internet, por ejemplo [éste, muy completo](http://es.tldp.org/Tutoriales/doc-tutorial-emacs/intro_emacs.pdf) y [éste, muy breve](http://exal.0x2.org/emacs/emacs.html)
+4. (Modo Python) Para optimizar la integración de Emacs con Python, instalar el paquete Python "virtualenv":
+
+        $ sudo pip install virtualenv
+
+Existen muchos recursos en internet para una introducción rápida a Emacs, por ejemplo [éste, muy completo](http://es.tldp.org/Tutoriales/doc-tutorial-emacs/intro_emacs.pdf) y [éste, muy breve](http://exal.0x2.org/emacs/emacs.html)
