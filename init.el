@@ -64,6 +64,9 @@
 (require 'saveplace)
 (setq-default save-place t)
 
+;; Ido for buffer switching
+(require 'ido)
+(ido-mode t)
 
 ;; Remove trailing whitespace automatically
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -120,10 +123,25 @@
 ;;,-------------
 ;;| Recent files
 ;;`-------------
+
+;; First idea: Let ido show recently closed buffers
+(setq ido-use-virtual-buffers t)
+
+;; Second idea: Use recentf and integrate it with recentf
 (require 'recentf)
-(setq recentf-max-saved-items 200
+(setq recentf-max-saved-items 150
       recentf-max-menu-items 15)
 (recentf-mode)
+
+(defun ido-recentf-open ()
+  "Use `ido-completing-read' to \\[find-file] a recent file"
+  (interactive)
+  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+      (message "Opening file...")
+    (message "Aborting")))
+
+(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+
 
 ;; I don't want to type in "yes" or "no" - I want y/n.
 (fset 'yes-or-no-p 'y-or-n-p)
