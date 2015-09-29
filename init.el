@@ -304,3 +304,20 @@
 ;;| Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10?
 ;;`--------------------------------------------------------------------
 (require 'iso-transl)
+
+;;,-----------------------------------------------------------
+;;| Directory for local lisp things (including subdirectoires)
+;;`-----------------------------------------------------------
+(setq site-lisp-dir (expand-file-name "site-lisp" user-emacs-directory))
+(let ((default-directory site-lisp-dir)) (normal-top-level-add-subdirs-to-load-path))
+(add-to-list 'load-path site-lisp-dir)
+
+;;,-----------------------------------------------------
+;;| Directory for store setup files (for specific modes)
+;;`-----------------------------------------------------
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/setup"))
+
+;;,------------------------
+;;| FreeFem++ setup
+;;`------------------------
+(require 'setup-freefem)

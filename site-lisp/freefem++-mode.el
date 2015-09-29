@@ -1,0 +1,1 @@
+../git-packages/freefem-mode/freefem++-mode.el
