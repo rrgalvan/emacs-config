@@ -22,6 +22,10 @@
   ;; line numbers format (add a vertical line on the right)
   (setq linum-format "%3d\u2502")
 
+  ;; set default color theme
+  (require 'color-theme)
+  (color-theme-initialize)
+  (color-theme-gtk-ide)
   )
 
 
@@ -258,13 +262,6 @@
    "^[ \t]*%+"                          ; 6
    "^[ \t]*!+"                          ; 7
    ])
-
-;;,------------------------
-;;| set default color theme
-;;`------------------------
-(require 'color-theme)
-(color-theme-initialize)
-(color-theme-gtk-ide)
 
 ;;,----------------------------------------------------------
 ;;| Python
