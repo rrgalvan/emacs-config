@@ -157,15 +157,17 @@
 ;;,-------------
 ;;| Autocomplete
 ;;`-------------
-(require 'auto-complete)
-(require 'auto-complete-config)
-(global-auto-complete-mode t)
-
-;; Autocomplete in all buffers (except minibuffer)
-(defun auto-complete-mode-maybe ()
-  "No maybe for you. Only AC!"
-  (unless (minibufferp (current-buffer))
-    (auto-complete-mode 1)))
+(use-package auto-complete
+  :ensure t
+  :config
+  (require 'auto-complete-config)
+  (global-auto-complete-mode t)
+  ;; Autocomplete in all buffers (except minibuffer)
+  (defun auto-complete-mode-maybe ()
+    "No maybe for you. Only AC!"
+    (unless (minibufferp (current-buffer))
+      (auto-complete-mode 1)))
+)
 
 ;;,---------------------------------------------
 ;;| smartparens for good handling of parentheses
@@ -301,6 +303,31 @@
 ;; )
 
 ;;,--------------------------------------------------------------------
-;;| Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10?
+;;| Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10
 ;;`--------------------------------------------------------------------
 (require 'iso-transl)
+
+
+;;,---------------------------------------------------------------
+;;| LaTeX (using the package Auctex: $sudo apt-get install auctex)
+;;`---------------------------------------------------------------
+
+;; Compile to LaTeX
+(setq TeX-PDF-mode t)
+;; Turn on spell-checking in LaTeX
+(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+;; Activate RefTeX
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(setq reftex-plug-into-AUCTeX t) ;; Supply labels automatically
+
+;; Direct/reverse search (through okular: $sudo apt-get install okular),
+;; http://www.flannaghan.com/2013/01/31/synctex-f17
+(add-hook 'LaTeX-mode-hook
+          (lambda()
+           (add-to-list 'TeX-expand-list
+                        '("%(dir)"
+                          (lambda () default-directory)))))
+(add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+;; (setq TeX-view-program-list
+;;       '(("okular" "okular --unique %o#src:%n%(dir)./%b")))
+(setq TeX-source-correlate-method 'synctex)
