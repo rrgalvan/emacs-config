@@ -28,7 +28,6 @@
   (color-theme-gtk-ide)
   )
 
-
 ;; No startup screen
 (setq inhibit-startup-message t)
 
@@ -71,6 +70,10 @@
 ;; Ido for buffer switching
 (require 'ido)
 (ido-mode t)
+(setq
+ ido-case-fold  t                 ; be case-insensitive
+ ido-confirm-unique-completion t ; wait for RET, even with unique completion
+ confirm-nonexistent-file-or-buffer nil) ;; The confirmation in ido is rather annoying...
 
 ;; Remove trailing whitespace automatically
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
