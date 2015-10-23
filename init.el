@@ -204,29 +204,32 @@
       (auto-complete-mode 1)))
 )
 
-;;,---------------------------------------------
-;;| smartparens for good handling of parentheses
-;;`---------------------------------------------
-(use-package smartparens
-  :ensure t
-  :diminish smartparens-mode
-  :config
-  (progn
-    (require 'smartparens-config)
-    (smartparens-global-mode 1)
+(add-hook 'f90-mode-hook 'gtags-mode)
 
-;;;;;;;;;;;;;;;;;;
-    ;; pair management
 
-    (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
-    (sp-local-pair 'web-mode "<" nil :when '(my/sp-web-mode-is-code-context))
+;; ;;,---------------------------------------------
+;; ;;| smartparens for good handling of parentheses
+;; ;;`---------------------------------------------
+;; (use-package smartparens
+;;   :ensure t
+;;   :diminish smartparens-mode
+;;   :config
+;;   (progn
+;;     (require 'smartparens-config)
+;;     (smartparens-global-mode 1)
 
-;;; markdown-mode, rst-mode, etc
-    (sp-with-modes '(markdown-mode gfm-mode rst-mode)
-      (sp-local-pair "*" "*" :bind "C-*")
-      (sp-local-tag "2" "**" "**")
-      (sp-local-tag "s" "```scheme" "```")
-      (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))))
+;; ;;;;;;;;;;;;;;;;;;
+;;     ;; pair management
+
+;;     (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
+;;     (sp-local-pair 'web-mode "<" nil :when '(my/sp-web-mode-is-code-context))
+
+;; ;;; markdown-mode, rst-mode, etc
+;;     (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+;;       (sp-local-pair "*" "*" :bind "C-*")
+;;       (sp-local-tag "2" "**" "**")
+;;       (sp-local-tag "s" "```scheme" "```")
+;;       (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))))
 
 ;;,--------------------------------------------------------------------
 ;;| Enhanced undo-redo
