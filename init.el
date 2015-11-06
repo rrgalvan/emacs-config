@@ -68,12 +68,12 @@
 (setq-default save-place t)
 
 ;; Ido for buffer switching
-(require 'ido)
-(ido-mode t)
-(setq
- ido-case-fold  t                 ; be case-insensitive
- ido-confirm-unique-completion t ; wait for RET, even with unique completion
- confirm-nonexistent-file-or-buffer nil) ;; The confirmation in ido is rather annoying...
+;; (require 'ido)
+;; (ido-mode t)
+;; (setq
+;;  ido-case-fold  t                 ; be case-insensitive
+;;  ido-confirm-unique-completion t ; wait for RET, even with unique completion
+;;  confirm-nonexistent-file-or-buffer nil) ;; The confirmation in ido is rather annoying...
 
 ;; Remove trailing whitespace automatically
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -149,7 +149,6 @@
 
 (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
-
 ;; I don't want to type in "yes" or "no" - I want y/n.
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -192,6 +191,7 @@
 ;;,-------------
 ;;| Autocomplete
 ;;`-------------
+
 (use-package auto-complete
   :ensure t
   :config
@@ -202,10 +202,39 @@
     "No maybe for you. Only AC!"
     (unless (minibufferp (current-buffer))
       (auto-complete-mode 1)))
+  (ac-flyspell-workaround) ;; Fixes a known bug of delay due to flyspell
 )
 
-(add-hook 'f90-mode-hook 'gtags-mode)
+;;,-------------
+;;| Fortran mode
+;;`-------------
 
+(add-to-list 'auto-mode-alist '("\\.f\\'" . f90-mode))
+(font-lock-add-keywords 'f90-mode
+			;; '(("%" . font-lock-keyword-face)))
+			'(("%" . font-lock-preprocessor-face)))
+
+;;,------
+;;| gtags
+;;`------
+
+;; (setq load-path (cons "/usr/local/share/gtags/gtags.el" load-path))
+;; (autoload 'gtags-mode "gtags-mode" "Loading GNU Global")
+;(autoload 'gtags-mode "gtags" "" t)
+;; (add-hook 'f90-mode-hook '(lambda ()
+;;           (gtags-mode t)
+;;           (setq gtags-global-command "/usr/local/bin/gtags")
+;;           (setq gtags-suggested-key-mapping t)))
+
+(use-package ggtags
+  :ensure t
+  :defer t)
+
+(add-hook 'f90-mode-hook 'ggtags-mode)
+(add-hook 'c-mode-common-hook (ggtags-mode 1))
+          ;; (lambda ()
+          ;;   (when (derived-mode-p 'c-mode 'c++-mode)
+          ;;     (ggtags-mode 1))))
 
 ;; ;;,---------------------------------------------
 ;; ;;| smartparens for good handling of parentheses
@@ -302,36 +331,22 @@
 	    (setq jedi:complete-on-dot t))
   )
 
-;; ;;,-------------------------------------------------
-;; ;;| Helm (auto-incremental completion and selection)
-;; ;;`-------------------------------------------------
-;; (use-package helm
-;;   :ensure helm
-;;   :diminish helm-mode
-;;   :defer t
-;;   :init
-;;   (progn
-;;     (require 'helm-config)
-;;     (setq helm-candidate-number-limit 100)
-;;     ;; From https://gist.github.com/antifuchs/9238468
-;;     (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
-;;           helm-input-idle-delay 0.01  ; this actually updates things                                        ; reeeelatively quickly.
-;;           helm-quick-update t
-;;           helm-M-x-requires-pattern nil
-;;           helm-ff-skip-boring-files t
-;; 	  recentf-max-menu-items 25
-;; 	  helm-recentf-fuzzy-match t ;; search for recent files
-;; 	  )
-;;     (helm-mode))
-;;   :bind (("C-x C-b" . helm-mini)
-;; 	 ("C-x b" . helm-mini)
-;; 	 ("C-h a" . helm-apropos)
-;;          ("M-y" . helm-show-kill-ring)
-;;          ("M-x" . helm-M-x)
-;;          ("C-x c o" . helm-occur)
-;;          ("C-x c s" . helm-swoop)
-;; 	 ("C-x c SPC" . helm-all-mark-rings))
-;; )
+;;,-------------------------------------------------
+;;| Helm (auto-incremental completion and selection)
+;;`-------------------------------------------------
+(use-package helm
+  :ensure helm
+  :diminish helm-mode
+  :defer t
+  :init
+  (progn
+    (helm-mode)
+    ;; Let <tab> completion in helm :-|
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+    (define-key helm-map (kbd "C-z") 'helm-select-action))
+  :bind (
+	 ("C-x b" . helm-mini))
+)
 
 ;;,--------------------------------------------------------------------
 ;;| Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10
@@ -361,6 +376,25 @@
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 (setq reftex-plug-into-AUCTeX t) ;; Supply labels automatically
 
+(use-package auto-complete-auctex
+  :ensure t
+  :init (require 'auto-complete-auctex)
+  )
+
+;; Math symbol menu and possibility of unicode auto-completion
+(use-package ac-math
+  :ensure t
+  :init (require 'ac-math))
+
+
+;; Okular
+
+;; (setq TeX-view-program-list '(("Okular" "okular --unique %u")))
+(setq TeX-view-program-selection '((output-pdf "Okular")))
+(setq TeX-view-program-list
+      '(("okular" "okular --unique %o#src:%n%(dir)./%b")))
+(setq TeX-source-correlate-method 'synctex)
+
 ;; Direct/reverse search (through okular: $sudo apt-get install okular),
 ;; http://www.flannaghan.com/2013/01/31/synctex-f17
 (add-hook 'LaTeX-mode-hook
@@ -369,6 +403,46 @@
                         '("%(dir)"
                           (lambda () default-directory)))))
 (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
-;; (setq TeX-view-program-list
-;;       '(("okular" "okular --unique %o#src:%n%(dir)./%b")))
-(setq TeX-source-correlate-method 'synctex)
+
+;; (add-hook 'LaTeX-mode-hook '(lambda ()
+;;                   (add-to-list 'TeX-expand-list
+;;                        '("%u" Okular-make-url))))
+
+;; (defun Okular-make-url () (concat
+;;                "file://"
+;;                (expand-file-name (funcall file (TeX-output-extension) t)
+;;                          (file-name-directory (TeX-master-file)))
+;;                "#src:"
+;;                (TeX-current-line)
+;;                (expand-file-name (TeX-master-directory))
+;;                "./"
+;;                (TeX-current-file-name-master-relative)))
+
+
+;; ;;,-------------------
+;; ;;| Choose color theme
+;; ;;`-------------------
+
+(when (display-graphic-p)
+  (when (>= emacs-major-version 24)
+    (require 'color-theme-solarized)
+    (set-frame-parameter nil 'background-mode 'dark)
+    (set-frame-parameter nil 'background-mode 'dark)
+    (setq solarized-high-contrast-mode-line t)
+    (color-theme-solarized))
+  )
+
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
+;; (load-theme 'zenburn t)
+;; (load-theme 'hc-zenburn t)
+;; (load-theme 'zerodark)
+
+;;,-----
+;;| Evil
+;;`-----
+(use-package evil
+  :ensure evil
+  :defer t
+)
+;;(require 'evil)
+;;(evil-mode 1)
