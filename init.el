@@ -122,6 +122,9 @@
   	 ))
 )
 
+;; I don't want to type in "yes" or "no" - I want y/n.
+(fset 'yes-or-no-p 'y-or-n-p)
+
 ;;,----------------------------------
 ;;| 'Standard' cut, copy, paste, undo
 ;;`----------------------------------
@@ -131,8 +134,8 @@
 ;;| Recent files
 ;;`-------------
 
-;; First idea: Let ido show recently closed buffers
-(setq ido-use-virtual-buffers t)
+;; ;; First idea: Let ido show recently closed buffers
+;; (setq ido-use-virtual-buffers t)
 
 ;; Second idea: Use recentf and integrate it with recentf
 (require 'recentf)
@@ -140,17 +143,15 @@
       recentf-max-menu-items 15)
 (recentf-mode)
 
-(defun ido-recentf-open ()
-  "Use `ido-completing-read' to \\[find-file] a recent file"
-  (interactive)
-  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-      (message "Opening file...")
-    (message "Aborting")))
+;; (defun ido-recentf-open ()
+;;   "Use `ido-completing-read' to \\[find-file] a recent file"
+;;   (interactive)
+;;   (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+;;       (message "Opening file...")
+;;     (message "Aborting")))
 
-(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+;; (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
-;; I don't want to type in "yes" or "no" - I want y/n.
-(fset 'yes-or-no-p 'y-or-n-p)
 
 ;;,-------------------
 ;;| Package management
@@ -419,18 +420,26 @@
 ;;                (TeX-current-file-name-master-relative)))
 
 
-;; ;;,-------------------
-;; ;;| Choose color theme
-;; ;;`-------------------
+;;,-------------------
+;;| Choose color theme
+;;`-------------------
 
-(when (display-graphic-p)
-  (when (>= emacs-major-version 24)
-    (require 'color-theme-solarized)
-    (set-frame-parameter nil 'background-mode 'dark)
-    (set-frame-parameter nil 'background-mode 'dark)
-    (setq solarized-high-contrast-mode-line t)
-    (color-theme-solarized))
-  )
+(when (>= emacs-major-version 24)
+  (use-package solarized-theme
+    :ensure t
+    :if window-system
+    :init
+    (progn
+      (setq solarized-use-less-bold t
+	    solarized-use-more-italic t
+	    solarized-emphasize-indicators nil
+	    solarized-distinct-fringe-background nil
+	    solarized-high-contrast-mode-line nil))
+    :config
+    (progn
+      (load "solarized-theme-autoloads" nil t)
+      (setq theme-dark 'solarized-dark
+	    theme-bright 'solarized-light))))
 
 ;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 ;; (load-theme 'zenburn t)
@@ -446,3 +455,45 @@
 )
 ;;(require 'evil)
 ;;(evil-mode 1)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(ansi-color-names-vector
+   (vector "#657b83" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#fdf6e3"))
+ '(custom-enabled-themes (quote (sanityinc-solarized-dark)))
+ '(custom-safe-themes
+   (quote
+    ("4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default)))
+ '(fci-rule-color "#eee8d5")
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#dc322f")
+     (40 . "#cb4b16")
+     (60 . "#b58900")
+     (80 . "#859900")
+     (100 . "#2aa198")
+     (120 . "#268bd2")
+     (140 . "#d33682")
+     (160 . "#6c71c4")
+     (180 . "#dc322f")
+     (200 . "#cb4b16")
+     (220 . "#b58900")
+     (240 . "#859900")
+     (260 . "#2aa198")
+     (280 . "#268bd2")
+     (300 . "#d33682")
+     (320 . "#6c71c4")
+     (340 . "#dc322f")
+     (360 . "#cb4b16"))))
+ '(vc-annotate-very-old-color nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
