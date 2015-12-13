@@ -126,6 +126,9 @@
   	 ))
 )
 
+;; I don't want to type in "yes" or "no" - I want y/n.
+(fset 'yes-or-no-p 'y-or-n-p)
+
 ;;,----------------------------------
 ;;| 'Standard' cut, copy, paste, undo
 ;;`----------------------------------
@@ -135,8 +138,8 @@
 ;;| Recent files
 ;;`-------------
 
-;; First idea: Let ido show recently closed buffers
-(setq ido-use-virtual-buffers t)
+;; ;; First idea: Let ido show recently closed buffers
+;; (setq ido-use-virtual-buffers t)
 
 ;; Second idea: Use recentf and integrate it with recentf
 (require 'recentf)
@@ -144,17 +147,15 @@
       recentf-max-menu-items 15)
 (recentf-mode)
 
-(defun ido-recentf-open ()
-  "Use `ido-completing-read' to \\[find-file] a recent file"
-  (interactive)
-  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-      (message "Opening file...")
-    (message "Aborting")))
+;; (defun ido-recentf-open ()
+;;   "Use `ido-completing-read' to \\[find-file] a recent file"
+;;   (interactive)
+;;   (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+;;       (message "Opening file...")
+;;     (message "Aborting")))
 
-(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+;; (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
-;; I don't want to type in "yes" or "no" - I want y/n.
-(fset 'yes-or-no-p 'y-or-n-p)
 
 ;;,-------------------
 ;;| Package management
@@ -414,9 +415,9 @@
 ;;                (TeX-current-file-name-master-relative)))
 
 
-;; ;;,-------------------
-;; ;;| Choose color theme
-;; ;;`-------------------
+;;,-------------------
+;;| Choose color theme
+;;`-------------------
 
 ;; (when (display-graphic-p)
 ;;   (when (>= emacs-major-version 24)
