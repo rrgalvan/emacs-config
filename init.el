@@ -119,12 +119,12 @@
   (transient-mark-mode t)
 
   ;; Select font
-   (if (find-font (font-spec :name "Dejavu Sans Mono"))
-       (progn
-  	 (set-fontset-font "fontset-default" 'unicode "Dejavu Sans Mono")
-  	 (set-face-font 'default "Inconsolata-15")
-  	 ))
-)
+  (if (find-font (font-spec :name "Dejavu Sans Mono"))
+      (progn
+	(set-fontset-font "fontset-default" 'unicode "Dejavu Sans Mono")
+	(set-face-font 'default "Inconsolata-15")
+	))
+  )
 
 ;; I don't want to type in "yes" or "no" - I want y/n.
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -190,7 +190,7 @@
 (use-package auto-compile
   :defer t
   :ensure t)
-  ;; :init (auto-compile-on-load-mode))
+;; :init (auto-compile-on-load-mode))
 (setq load-prefer-newer t)
 
 ;;,-------------
@@ -208,7 +208,7 @@
     (unless (minibufferp (current-buffer))
       (auto-complete-mode 1)))
   (ac-flyspell-workaround) ;; Fixes a known bug of delay due to flyspell
-)
+  )
 
 ;;,-------------
 ;;| Fortran mode
@@ -225,7 +225,7 @@
 
 ;; (setq load-path (cons "/usr/local/share/gtags/gtags.el" load-path))
 ;; (autoload 'gtags-mode "gtags-mode" "Loading GNU Global")
-;(autoload 'gtags-mode "gtags" "" t)
+					;(autoload 'gtags-mode "gtags" "" t)
 ;; (add-hook 'f90-mode-hook '(lambda ()
 ;;           (gtags-mode t)
 ;;           (setq gtags-global-command "/usr/local/bin/gtags")
@@ -237,9 +237,9 @@
 
 (add-hook 'f90-mode-hook 'ggtags-mode)
 (add-hook 'c-mode-common-hook (ggtags-mode 1))
-          ;; (lambda ()
-          ;;   (when (derived-mode-p 'c-mode 'c++-mode)
-          ;;     (ggtags-mode 1))))
+;; (lambda ()
+;;   (when (derived-mode-p 'c-mode 'c++-mode)
+;;     (ggtags-mode 1))))
 
 ;; ;;,---------------------------------------------
 ;; ;;| smartparens for good handling of parentheses
@@ -265,7 +265,7 @@
 ;;       (sp-local-tag "s" "```scheme" "```")
 ;;       (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))))
 
-;
+					;
 ;; (use-package imenu-anywhere
 ;;   :ensure t
 ;;   :bind (("C-c i" . imenu-anywhere)))
@@ -340,9 +340,10 @@
     ;; Let <tab> completion in helm :-|
     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
     ;; (define-key helm-map (kbd "C-z") 'helm-select-action))
-  :bind (
-	 ("C-x b" . helm-mini))
-)
+    )
+    :bind (
+	   ("C-x b" . helm-mini))
+    )
 
 ;;,--------------------------------------------------------------------
 ;;| Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10
@@ -394,10 +395,10 @@
 ;; Direct/reverse search (through okular: $sudo apt-get install okular),
 ;; http://www.flannaghan.com/2013/01/31/synctex-f17
 (add-hook 'LaTeX-mode-hook
-          (lambda()
-           (add-to-list 'TeX-expand-list
-                        '("%(dir)"
-                          (lambda () default-directory)))))
+	  (lambda()
+	    (add-to-list 'TeX-expand-list
+			 '("%(dir)"
+			   (lambda () default-directory)))))
 (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
 
 ;; (add-hook 'LaTeX-mode-hook '(lambda ()
@@ -439,7 +440,7 @@
 (use-package evil
   :ensure evil
   :defer t
-)
+  )
 ;;(require 'evil)
 ;;(evil-mode 1)
 
