@@ -26,6 +26,10 @@
   (require 'color-theme)
   (color-theme-initialize)
   (color-theme-gtk-ide)
+  ;; (color-theme-rotor)
+  ;; (color-theme-sanityinc-solarized-light)
+  ;; (color-theme-solarized) // dark
+  ;; (color-theme-arjen) // dark
   )
 
 ;; No startup screen
@@ -260,16 +264,7 @@
 ;;       (sp-local-tag "s" "```scheme" "```")
 ;;       (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))))
 
-;;,--------------------------------------------------------------------
-;;| Enhanced undo-redo
-;;`--------------------------------------------------------------------
-(use-package undo-tree
-  :ensure t
-  :diminish undo-tree-mode
-  :init (global-undo-tree-mode))
-(defalias 'redo 'undo-tree-redo)
-(global-set-key [(control x)(control z)] 'redo)
-
+;
 ;; (use-package imenu-anywhere
 ;;   :ensure t
 ;;   :bind (("C-c i" . imenu-anywhere)))
@@ -343,7 +338,7 @@
     (helm-mode)
     ;; Let <tab> completion in helm :-|
     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-    (define-key helm-map (kbd "C-z") 'helm-select-action))
+    ;; (define-key helm-map (kbd "C-z") 'helm-select-action))
   :bind (
 	 ("C-x b" . helm-mini))
 )
@@ -423,14 +418,14 @@
 ;; ;;| Choose color theme
 ;; ;;`-------------------
 
-(when (display-graphic-p)
-  (when (>= emacs-major-version 24)
-    (require 'color-theme-solarized)
-    (set-frame-parameter nil 'background-mode 'dark)
-    (set-frame-parameter nil 'background-mode 'dark)
-    (setq solarized-high-contrast-mode-line t)
-    (color-theme-solarized))
-  )
+;; (when (display-graphic-p)
+;;   (when (>= emacs-major-version 24)
+;;     (require 'color-theme-solarized)
+;;     (set-frame-parameter nil 'background-mode 'dark)
+;;     (set-frame-parameter nil 'background-mode 'dark)
+;;     (setq solarized-high-contrast-mode-line t)
+;;     (color-theme-solarized))
+;;   )
 
 ;; (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 ;; (load-theme 'zenburn t)
@@ -446,3 +441,9 @@
 )
 ;;(require 'evil)
 ;;(evil-mode 1)
+
+;;,------
+;;| Tramp
+;;`------
+
+(setq tramp-default-method "ssh") ;; Faster than scp, according to wiki
