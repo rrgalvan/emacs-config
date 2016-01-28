@@ -167,7 +167,7 @@
   ;; nevertheless contains a list separated with ';' and not ','."
   freefem++ '("adaptmesh" "assert" "buildmesh"  "clock" "convect" 
          "dx" "dy" "dz" "intalledges" "int1d" "int2d" "int3d" 
-	 "jump" "mean" "movemesh" "on" "plot" "savemesh" "square"
+	 "jump" "mean" "average" "movemesh" "on" "plot" "savemesh" "square"
          "sin" "cos" "tan" "atan" "asin" "acos"
          "cotan" "sinh" "cosh" "tanh""cotanh"
          "exp" "log" "log10" "sqrt" "abs" "max" "min"
@@ -195,7 +195,7 @@
          "tgv" "tolpivot" "tolpivotsym"
          "x" "y" "z"
 					; Finite elements
-         "P" "P0" "P1" "P2" "RT0" "P1nc" "P1dc" "P2dc" "P1b"
+         "P" "P0" "P1" "P2" "P3" "P4" "RT0" "P1nc" "P1dc" "P2dc" "P3dc" "P4dc" "P1b"
 					; Solvers
          "LU" "Cholesky" "Crout" "CG" "GMRES" "UMFPACK" "sparsesolver"
 					; Quadrature keywords

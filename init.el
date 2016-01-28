@@ -449,3 +449,11 @@
 ;;`------
 
 (setq tramp-default-method "ssh") ;; Faster than scp, according to wiki
+
+;;,------
+;;| Magit
+;;`------
+
+(use-package magit
+  :config (progn
+	    (bind-key "C-x g" #'magit-status)))
