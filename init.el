@@ -133,8 +133,9 @@
 ;;| 'Standard' cut, copy, paste, undo
 ;;`----------------------------------
 (cua-mode 1)
+(setq cua-prefix-override-inhibit-delay 0.5)
 
-;;,-------------
+ ;;,-------------
 ;;| Recent files
 ;;`-------------
 
@@ -439,7 +440,9 @@
 ;;`-----
 (use-package evil
   :ensure evil
-  :defer t
+  :init
+  (progn
+    (global-set-key "\C-c\C-e" 'evil-mode))
   )
 ;;(require 'evil)
 ;;(evil-mode 1)
@@ -455,5 +458,22 @@
 ;;`------
 
 (use-package magit
+  :defer t
   :config (progn
 	    (bind-key "C-x g" #'magit-status)))
+
+;;,-----------------
+;;| Google translate
+;;`-----------------
+(use-package google-translate
+  :ensure google-translate
+  :defer t
+  :init
+  (progn
+    (global-set-key (kbd "\C-c tt") 'google-translate-at-point)
+    (global-set-key (kbd "\C-c tT") 'google-translate-query-translate)
+    (global-set-key (kbd "C-c tr") 'google-translate-at-point-reverse)
+    (global-set-key (kbd "C-c tR") 'google-translate-query-translate-reverse)
+    (setq google-translate-show-phonetic t)
+    (setq google-translate-default-source-language "es")
+    (setq google-translate-default-target-language "en")))
