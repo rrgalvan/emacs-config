@@ -319,32 +319,15 @@
   )
 
 ;; Jedi (python auto-completion)
-(use-package jedi
-  :ensure t
-  :defer 1 ;; Wait for 1 seconds of idle time
-  :config (progn
-	    (jedi:install-server)
-	    (add-hook 'python-mode-hook 'jedi:setup)
-	    (setq jedi:complete-on-dot t))
-  )
-
-;;,-------------------------------------------------
-;;| Helm (auto-incremental completion and selection)
-;;`-------------------------------------------------
-(use-package helm
-  :ensure helm
-  :diminish helm-mode
-  :defer t
-  :init
-  (progn
-    (helm-mode)
-    ;; Let <tab> completion in helm :-|
-    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-    ;; (define-key helm-map (kbd "C-z") 'helm-select-action))
-    )
-    :bind (
-	   ("C-x b" . helm-mini))
-    )
+;; (DISABLED BECAUSE OF ERRORS IN CURRENT VERSION)
+;; (use-package jedi
+;;   :ensure t
+;;   :defer 1 ;; Wait for 1 seconds of idle time
+;;   :config (progn
+;; 	    (jedi:install-server)
+;; 	    (add-hook 'python-mode-hook 'jedi:setup)
+;; 	    (setq jedi:complete-on-dot t))
+;;   )
 
 ;;,--------------------------------------------------------------------
 ;;| Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10
@@ -434,18 +417,6 @@
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'hc-zenburn t)
 ;; (load-theme 'zerodark)
-
-;;,-----
-;;| Evil
-;;`-----
-(use-package evil
-  :ensure evil
-  :init
-  (progn
-    (global-set-key "\C-c\C-e" 'evil-mode))
-  )
-;;(require 'evil)
-;;(evil-mode 1)
 
 ;;,------
 ;;| Tramp

@@ -8,6 +8,8 @@ Ficheros de configuración de Emacs orientados a que
 
 Instalación
 ---------------
+0. Instalar emacs y emacs-goodies-el
+sudo apt-get intall emacs emacs-goodies-el 
 1. Asegurarse de que en la carpeta $HOME no existe el archivo regular *.emacs* ni el directorio *.emacs.d* (donde se almacena la configuración de emacs). Por ejemplo, se pueden borrar directamente (por supuesto, si se desea guardar la configuración previa, se debe hacer una copia antes de borrar):
 
 		$ rm -rf .emacs .emacs.d
