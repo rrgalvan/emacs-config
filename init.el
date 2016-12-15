@@ -517,5 +517,10 @@
 ;;   (require 'ein)
 ;;   )
 
+;;
+;; Org mode
+;;
+(require 'setup-org-mode)
+
 (provide 'init)
 ;;; init.el ends here
