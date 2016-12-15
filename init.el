@@ -138,29 +138,6 @@
 (cua-mode 1)
 (setq cua-prefix-override-inhibit-delay 0.5)
 
- ;;,-------------
-;;| Recent files
-;;`-------------
-
-;; ;; First idea: Let ido show recently closed buffers
-;; (setq ido-use-virtual-buffers t)
-
-;; Second idea: Use recentf and integrate it with recentf
-(require 'recentf)
-(setq recentf-max-saved-items 150
-      recentf-max-menu-items 15)
-(recentf-mode)
-
-;; (defun ido-recentf-open ()
-;;   "Use `ido-completing-read' to \\[find-file] a recent file"
-;;   (interactive)
-;;   (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-;;       (message "Opening file...")
-;;     (message "Aborting")))
-
-;; (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
-
-
 ;;,-------------------
 ;;| Package management
 ;;`-------------------
@@ -179,6 +156,65 @@
   (package-install 'use-package))
 
 (require 'use-package)
+
+;;,-------------
+;;| Recent files
+;;`-------------
+
+;; ;; First idea: Let ido show recently closed buffers
+;; (setq ido-use-virtual-buffers t)
+
+;; Second idea: Use recentf and integrate it with icicles
+(require 'recentf)
+(setq recentf-max-saved-items 150
+      recentf-max-menu-items 15)
+(recentf-mode)
+
+;;,--------
+;;| Icicles
+;;`--------
+(use-package icicles
+  :defer t
+  :ensure t
+  :init
+   (progn
+     (icy-mode 1)
+     (setq icicle-buffer-include-recent-files-nflag 20)
+     )
+   :bind (
+	  ("C-x b" . icicle-buffer)
+     )
+   )
+
+
+;; ;;,-------------------------------------------------
+;; ;;| Helm (auto-incremental completion and selection)
+;; ;;`-------------------------------------------------
+;; (use-package helm
+;;   :ensure helm
+;;   :diminish helm-mode
+;;   :defer t
+;;   :init
+;;   (progn
+;;     (helm-mode)
+;;     ;; Let <tab> completion in helm :-|
+;;     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+;;     ;; (define-key helm-map (kbd "C-z") 'helm-select-action))
+;;     )
+;;     :bind (
+;; 	   ("C-x b" . helm-mini))
+;;     )
+
+
+;; (defun ido-recentf-open ()
+;;   "Use `ido-completing-read' to \\[find-file] a recent file"
+;;   (interactive)
+;;   (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+;;       (message "Opening file...")
+;;     (message "Aborting")))
+
+;; (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+
 
 ;;,----------------------------------------------
 ;;| Install manually 'dash package (to avoid bug)
@@ -421,6 +457,18 @@
 ;; (load-theme 'hc-zenburn t)
 ;; (load-theme 'zerodark)
 
+;;,-----
+;;| Evil
+;;`-----
+(use-package evil
+  :ensure evil
+  :init
+  (progn
+    (global-set-key (kbd "\C-c e") 'evil-mode))
+  )
+;;(require 'evil)
+;;(evil-mode 1)
+
 ;;,------
 ;;| Tramp
 ;;`------
@@ -451,3 +499,23 @@
     (setq google-translate-show-phonetic t)
     (setq google-translate-default-source-language "es")
     (setq google-translate-default-target-language "en")))
+
+;;,-----------------
+;; flycheck (on the fly check programming language syntax)
+;;`-----------------
+(use-package flycheck
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  (setq flycheck-gfortran-language-standard "f2008ts"))
+
+
+;; ;;,-----------------------
+;; ;;| Emacs ipython notebook
+;; ;;`-----------------------
+;; (use-package ein
+;;   :config
+;;   (require 'ein)
+;;   )
+
+(provide 'init)
+;;; init.el ends here
