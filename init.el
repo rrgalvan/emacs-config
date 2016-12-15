@@ -122,6 +122,9 @@
   (if (find-font (font-spec :name "Dejavu Sans Mono"))
       (progn
 	(set-fontset-font "fontset-default" 'unicode "Dejavu Sans Mono")
+	))
+  (if (find-font (font-spec :name "Inconsolata"))
+      (progn
 	(set-face-font 'default "Inconsolata-15")
 	))
   )
@@ -302,21 +305,21 @@
 ;;`----------------------------------------------------------
 (use-package python-mode
   :ensure t
-  :defer 1 ;; Wait for 1 seconds of idle time
+  ;; :defer 1 ;; Wait for 1 seconds of idle time
   :config (progn
-	    (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-	    (add-to-list 'interpreter-mode-alist '("python" . python-mode))
-	    ;; (require 'ipython)
-	    ;; Other stuff
-	    (setq-default py-shell-name "ipython")
-	    (setq-default py-which-bufname "IPython")
-					; switch to the interpreter after executing code
-	    (setq py-shell-switch-buffers-on-execute-p t)
-	    (setq py-switch-buffers-on-execute-p t)
-					; don't split windows
-	    (setq py-split-windows-on-execute-p nil)
-	    )
-  )
+  	    (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+  	    (add-to-list 'interpreter-mode-alist '("python" . python-mode))
+  	    ;; (require 'ipython)
+  	    ;; Other stuff
+  	    (setq-default py-shell-name "ipython")
+  	    (setq-default py-which-bufname "IPython")
+  					; switch to the interpreter after executing code
+  	    (setq py-shell-switch-buffers-on-execute-p t)
+  	    (setq py-switch-buffers-on-execute-p t)
+  					; don't split windows
+  	    (setq py-split-windows-on-execute-p nil)
+  	    )
+   )
 
 ;; Jedi (python auto-completion)
 ;; (DISABLED BECAUSE OF ERRORS IN CURRENT VERSION)
