@@ -167,7 +167,7 @@
 ;; Second idea: Use recentf and integrate it with icicles
 (require 'recentf)
 (setq recentf-max-saved-items 150
-      recentf-max-menu-items 15)
+      recentf-max-menu-items 25)
 (recentf-mode)
 
 ;;,--------
