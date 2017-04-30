@@ -275,11 +275,23 @@
   :ensure t
   :defer t)
 
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode)) ;; Use c++ mode for .h files
 (add-hook 'f90-mode-hook 'ggtags-mode)
 (add-hook 'c-mode-common-hook (ggtags-mode 1))
 ;; (lambda ()
 ;;   (when (derived-mode-p 'c-mode 'c++-mode)
 ;;     (ggtags-mode 1))))
+
+;;
+;; Markdown
+;;
+(use-package markdown-mode
+  :ensure t
+  ;; :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
 
 ;; ;;,---------------------------------------------
 ;; ;;| smartparens for good handling of parentheses
@@ -463,11 +475,7 @@
 (use-package evil
   :ensure evil
   :init
-  (progn
-    (global-set-key (kbd "\C-c e") 'evil-mode))
-  )
-;;(require 'evil)
-;;(evil-mode 1)
+	(evil-mode 1))
 
 ;;,------
 ;;| Tramp
@@ -524,3 +532,7 @@
 
 (provide 'init)
 ;;; init.el ends here
+
+;;; gmsh
+(require 'gmsh)
+(add-to-list 'auto-mode-alist '("\\.geo$" . gmsh-mode))
