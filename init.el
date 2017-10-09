@@ -112,7 +112,7 @@
 ;;(setq cursor-type 'bar)
 
 ;; M-x compile is tedious
-(global-set-key (kbd "C-c c") 'compile)
+(global-set-key (kbd "C-c C") 'compile)
 
 (when window-system
   ;; Highlight marked text - only works under X.
@@ -536,3 +536,6 @@
 ;;; gmsh
 (require 'gmsh)
 (add-to-list 'auto-mode-alist '("\\.geo$" . gmsh-mode))
+
+;; php
+(add-to-list 'auto-mode-alist '("\\.php\\'" . html-mode)) ;; Use html mode for .php files
