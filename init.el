@@ -534,6 +534,9 @@
 ;;; init.el ends here
 
 ;;; gmsh
+;; (use-package imenu-anywhere
+;;   :ensure t
+;;   :bind (("C-c i" . imenu-anywhere)))
 (require 'gmsh)
 (add-to-list 'auto-mode-alist '("\\.geo$" . gmsh-mode))
 
