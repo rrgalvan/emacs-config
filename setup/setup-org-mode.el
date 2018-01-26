@@ -5,7 +5,7 @@
 ;; GTD
 
 ;; Org caputure
-(global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c C") 'org-capture)
 (setq org-default-notes-file "~/gtd/inbox.org")
 
 (global-set-key (kbd "C-c C-g")

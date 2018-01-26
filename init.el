@@ -112,7 +112,7 @@
 ;;(setq cursor-type 'bar)
 
 ;; M-x compile is tedious
-(global-set-key (kbd "C-c C") 'compile)
+(global-set-key (kbd "C-c c") 'compile)
 
 (when window-system
   ;; Highlight marked text - only works under X.
@@ -141,6 +141,7 @@
 ;;,-------------------
 ;;| Package management
 ;;`-------------------
+(setq use-package-verbose t)
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
@@ -170,41 +171,44 @@
       recentf-max-menu-items 25)
 (recentf-mode)
 
-;;,--------
-;;| Icicles
-;;`--------
-(use-package icicles
+;; ;;,--------
+;; ;;| Icicles
+;; ;;`--------
+;; (use-package icicles
+;;   :defer t
+;;   :ensure t
+;;   :init
+;;    (progn
+;;      (icy-mode 1)
+;;      (setq icicle-buffer-include-recent-files-nflag 20)
+;;      )
+;;    :bind (
+;; 	  ("C-x b" . icicle-buffer)
+;;      )
+;;    )
+
+(use-package ido
   :defer t
   :ensure t
+)
+
+;;,-------------------------------------------------
+;;| Helm (auto-incremental completion and selection)
+;;`-------------------------------------------------
+(use-package helm
+  :ensure helm
+  :diminish helm-mode
+  :defer t
   :init
-   (progn
-     (icy-mode 1)
-     (setq icicle-buffer-include-recent-files-nflag 20)
-     )
-   :bind (
-	  ("C-x b" . icicle-buffer)
-     )
-   )
-
-
-;; ;;,-------------------------------------------------
-;; ;;| Helm (auto-incremental completion and selection)
-;; ;;`-------------------------------------------------
-;; (use-package helm
-;;   :ensure helm
-;;   :diminish helm-mode
-;;   :defer t
-;;   :init
-;;   (progn
-;;     (helm-mode)
-;;     ;; Let <tab> completion in helm :-|
-;;     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-;;     ;; (define-key helm-map (kbd "C-z") 'helm-select-action))
-;;     )
-;;     :bind (
-;; 	   ("C-x b" . helm-mini))
-;;     )
-
+  (progn
+    (helm-mode)
+    ;; Let <tab> completion in helm :-|
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+    ;; (define-key helm-map (kbd "C-z") 'helm-select-action))
+    )
+    :bind (
+	   ("C-x b" . helm-mini))
+    )
 
 ;; (defun ido-recentf-open ()
 ;;   "Use `ido-completing-read' to \\[find-file] a recent file"
@@ -325,60 +329,43 @@
 ;;,----------------------------------------------------
 ;;| Rebox (fancy comment boxes, see rebox2.el for help)
 ;;`----------------------------------------------------
+
 (use-package rebox2
-  :defer 2 ;; Wait for 2 seconds idle
-  :ensure t )
-(global-set-key [(shift meta /)] 'rebox-dwim)
-(global-set-key [(meta /)] 'rebox-cycle)
+ :defer 2 ;; Wait for 2 seconds idle
+ :ensure t
+ :config
+ (progn
+   (rebox-register-template
+    98
+    998
+    '("??=============??"
+      "?? box123456   ??"
+      "??-------------??"))
+   (rebox-register-template
+    99
+    999
+    '("??,-----------"
+      "??| box123456 "))
+   (setq rebox-style-loop '(27 23 98 99 21))
+   (setq rebox-min-fill-column 72)
+   (global-set-key [(shift meta q)] 'rebox-dwim)
+   (global-set-key [(meta /)] 'rebox-cycle)
+   ;; Make rebox2 work for fortran90 comments (see https://github.com/lewang/rebox2/issues/11)
+   (defvar rebox-language-character-alist
+     '((3 . "/") (4 . "#") (5 . ";") (6 . "%") (7 . "!"))
+     "List relating language to comment character, for generic languages.")
+   ))
+;; (defvar rebox-regexp-start
+;;   ["^[ \t]*\\(/\\*\\|//+\\|#+\\|;+\\|%+\\)"
+;;    "^"                                  ; 1
+;;    "^[ \t]*/\\*"                        ; 2
+;;    "^[ \t]*//+"                         ; 3
+;;    "^[ \t]*#+"                          ; 4
+;;    "^[ \t]*\;+"                         ; 5
+;;    "^[ \t]*%+"                          ; 6
+;;    "^[ \t]*!+"                          ; 7
+;;    ])
 
-;; Make rebox2 work for fortran90 comments (see https://github.com/lewang/rebox2/issues/11)
-(defvar rebox-language-character-alist
-  '((3 . "/") (4 . "#") (5 . ";") (6 . "%") (7 . "!"))
-  "Alist relating language to comment character, for generic languages.")
-(defvar rebox-regexp-start
-  ["^[ \t]*\\(/\\*\\|//+\\|#+\\|;+\\|%+\\)"
-   "^"                                  ; 1
-   "^[ \t]*/\\*"                        ; 2
-   "^[ \t]*//+"                         ; 3
-   "^[ \t]*#+"                          ; 4
-   "^[ \t]*\;+"                         ; 5
-   "^[ \t]*%+"                          ; 6
-   "^[ \t]*!+"                          ; 7
-   ])
-
-;;,----------------------------------------------------------
-;;| Python
-;;|   Main python modes: (a) python (b) python-mode,
-;;|   see http://emacswiki.org/emacs/PythonProgrammingInEmacs
-;;`----------------------------------------------------------
-(use-package python-mode
-  :ensure t
-  ;; :defer 1 ;; Wait for 1 seconds of idle time
-  :config (progn
-  	    (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-  	    (add-to-list 'interpreter-mode-alist '("python" . python-mode))
-  	    ;; (require 'ipython)
-  	    ;; Other stuff
-  	    (setq-default py-shell-name "ipython")
-  	    (setq-default py-which-bufname "IPython")
-  					; switch to the interpreter after executing code
-  	    (setq py-shell-switch-buffers-on-execute-p t)
-  	    (setq py-switch-buffers-on-execute-p t)
-  					; don't split windows
-  	    (setq py-split-windows-on-execute-p nil)
-  	    )
-   )
-
-;; Jedi (python auto-completion)
-;; (DISABLED BECAUSE OF ERRORS IN CURRENT VERSION)
-;; (use-package jedi
-;;   :ensure t
-;;   :defer 1 ;; Wait for 1 seconds of idle time
-;;   :config (progn
-;; 	    (jedi:install-server)
-;; 	    (add-hook 'python-mode-hook 'jedi:setup)
-;; 	    (setq jedi:complete-on-dot t))
-;;   )
 
 ;;,--------------------------------------------------------------------
 ;;| Fix bug with dead-keys in Ubuntu 13.10, 14.04, 14.10
@@ -516,14 +503,21 @@
   (add-hook 'after-init-hook #'global-flycheck-mode)
   (setq flycheck-gfortran-language-standard "f2008ts"))
 
+;;,---------------------------------------------------------------------
+;;| Python
+;;`---------------------------------------------------------------------
+(require 'setup-python)
 
-;; ;;,-----------------------
-;; ;;| Emacs ipython notebook
-;; ;;`-----------------------
+;;,-----------------------
+;;| Emacs ipython notebook
+;;`-----------------------
+(use-package ein
+  :config
+  (require 'ein)
+  )
 ;; (use-package ein
-;;   :config
-;;   (require 'ein)
-;;   )
+;;   :ensure t
+;;   :commands (ein:notebooklist-open))
 
 ;;
 ;; Org mode
