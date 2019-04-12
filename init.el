@@ -9,6 +9,26 @@
 (load "server")
 (unless (server-running-p) (server-start))
 
+;;,-------------------
+;;| Package management
+;;`-------------------
+(setq use-package-verbose t)
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(package-initialize)
+(setq package-enable-at-startup nil)
+
+;; In current emacs configuration we will employ 'use-package' for
+;; install and config packages. See https://github.com/jwiegley/use-package
+
+;; Bootstrap `use-package'
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(require 'use-package)
+
 ;;,-------------------------------------------------------------------------
 ;;| Personalize basic emacs behaviour. See https://github.com/rrgalvan/emacs
 ;;`-------------------------------------------------------------------------
@@ -20,17 +40,58 @@
   ;; display line numbers in margin. New in Emacs 23
   (global-linum-mode 1)
   ;; line numbers format (add a vertical line on the right)
-  (setq linum-format "%3d\u2502")
+(setq linum-format "%3d\u2502")
 
-  ;; set default color theme
-  (require 'color-theme)
-  (color-theme-initialize)
-  (color-theme-gtk-ide)
-  ;; (color-theme-rotor)
-  ;; (color-theme-sanityinc-solarized-light)
-  ;; (color-theme-solarized) // dark
-  ;; (color-theme-arjen) // dark
+;; ;; set default color theme
+;; (require 'color-theme)
+;; (color-theme-initialize)
+;; (color-theme-gtk-ide)
+;; (color-theme-rotor)
+;; (color-theme-sanityinc-solarized-light)
+;; (color-theme-solarized) // dark
+;; (color-theme-arjen) // dark
+)
+
+
+;;(menu-bar-mode -1) ;; Disable menu bar
+(tool-bar-mode -1) ;; Disable icons
+;;(toggle-scroll-bar -1) ;; Disable scroll bar
+
+;;,---------------------------------------------------------------------
+;;| Color theme. To see all possibilities, write: M-x custom-themes
+;;`---------------------------------------------------------------------
+;; (load-theme 'misterioso)
+
+(use-package panda-theme
+  :ensure t
+  :config
+  (set-cursor-color "#f0f0f0")
   )
+
+;;------------------------------------------------------------------------------
+;; cursor blinking and changing colors
+;; taken from http://stackoverflow.com/questions/4642835/how-to-change-the-cursor-color-on-emacs
+;;------------------------------------------------------------------------------
+; Using in Emacs 24.0
+
+(setq blink-cursor-interval 0.5)
+(setq blink-cursor-colors (list "#80c2e4" "#e4c040" "#92d88f" "#be369c" "#6785c5"  "#6a984a"))
+  ;; "On each blink the cursor will cycle to the next color in this list.")
+(setq blink-cursor-count 0)
+(defun blink-cursor-timer-function ()
+  "Zarza wrote this cyberpunk variant of timer `blink-cursor-timer'.
+Warning: overwrites original version in `frame.el'.
+
+This one changes the cursor color on each blink. Define colors in `blink-cursor-colors'."
+  (when (not (internal-show-cursor-p))
+    (when (>= blink-cursor-count (length blink-cursor-colors))
+      (setq blink-cursor-count 0))
+    (set-cursor-color (nth blink-cursor-count blink-cursor-colors))
+    (setq blink-cursor-count (+ 1 blink-cursor-count))
+    )
+  (internal-show-cursor nil (not (internal-show-cursor-p)))
+  )
+
 
 ;; No startup screen
 (setq inhibit-startup-message t)
@@ -137,26 +198,6 @@
 ;;`----------------------------------
 (cua-mode 1)
 (setq cua-prefix-override-inhibit-delay 0.5)
-
-;;,-------------------
-;;| Package management
-;;`-------------------
-(setq use-package-verbose t)
-(require 'package)
-(setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(package-initialize)
-(setq package-enable-at-startup nil)
-
-;; In current emacs configuration we will employ 'use-package' for
-;; install and config packages. See https://github.com/jwiegley/use-package
-
-;; Bootstrap `use-package'
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(require 'use-package)
 
 ;;,-------------
 ;;| Recent files
@@ -536,3 +577,20 @@
 
 ;; php
 (add-to-list 'auto-mode-alist '("\\.php\\'" . html-mode)) ;; Use html mode for .php files
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("0eccc893d77f889322d6299bec0f2263bffb6d3ecc79ccef76f1a2988859419e" default)))
+ '(package-selected-packages
+   (quote
+    (panda-theme zeno-theme ein flycheck elpy google-translate evil ac-math auto-complete-auctex use-package rebox2 markdown-mode helm ggtags dash auto-complete auto-compile))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
